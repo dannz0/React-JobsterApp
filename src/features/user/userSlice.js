@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import customFetch from '../../utils/axios';
 import {
@@ -7,6 +6,7 @@ import {
   getUserFromLocalStorage,
   removeUserFromLocalStorage,
 } from '../../utils/localStorage';
+import { signUpThunk, updateUserThunk } from './userThunk';
 
 const initialState = {
   isLoading: false,
@@ -51,6 +51,23 @@ const userSlice = createSlice({
       .addCase(signUp.rejected, (state, { payload }) => {
         state.isLoading = false;
         toast.error(payload);
+      })
+      .addCase(updateUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateUser.fulfilled, (state, { payload }) => {
+        const { user } = payload;
+
+        state.isLoading = false;
+        state.user = user;
+
+        addUserToLocalStorage(user);
+
+        toast.success('Profile updated!');
+      })
+      .addCase(updateUser.rejected, (state, { payload }) => {
+        state.isLoading = false;
+        toast.error(payload);
       });
   },
 });
@@ -58,13 +75,14 @@ const userSlice = createSlice({
 export const signUp = createAsyncThunk(
   'user/signUp',
   async function (user, thunkAPI) {
-    try {
-      const res = await customFetch.post(`auth/${user.action}`, user);
+    return signUpThunk(`auth/${user.action}`, user, thunkAPI);
+  }
+);
 
-      return { data: res.data, action: user.action };
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data.msg);
-    }
+export const updateUser = createAsyncThunk(
+  'user/updateUser',
+  async function (user, thunkAPI) {
+    return updateUserThunk('/auth/updateUser', user, thunkAPI);
   }
 );
 
