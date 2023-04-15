@@ -87,6 +87,22 @@ const Register = () => {
         <button className='btn btn-block' type='submit' disabled={isLoading}>
           {isLoading ? 'loading...' : 'submit'}
         </button>
+        <button
+          className='btn btn-block btn-hipster'
+          type='button'
+          disabled={isLoading}
+          onClick={() =>
+            dispatch(
+              signUp({
+                email: 'testUser@test.com',
+                password: 'secret',
+                action: 'login',
+              })
+            )
+          }
+        >
+          {isLoading ? 'loading...' : 'demo'}
+        </button>
         <p>
           {values.isMember ? 'Not a member yet?' : 'Already a member?'}
           <button type='button' onClick={toggleMember} className='member-btn'>

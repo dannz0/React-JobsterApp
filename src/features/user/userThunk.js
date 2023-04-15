@@ -14,11 +14,7 @@ export const signUpThunk = async function (url, user, thunkAPI) {
 
 export const updateUserThunk = async function (url, user, thunkAPI) {
   try {
-    const res = await customFetch.patch(url, user, {
-      headers: {
-        authorization: `Bearer ${thunkAPI.getState().user.user.token}`,
-      },
-    });
+    const res = await customFetch.patch(url, user);
 
     return res.data;
   } catch (error) {
