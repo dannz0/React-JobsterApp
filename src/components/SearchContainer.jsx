@@ -10,7 +10,7 @@ const SearchContainer = () => {
   const dispatch = useDispatch();
 
   const handleSearch = function (e) {
-    // if(isLoading) return;
+    if (isLoading) return;
     dispatch(handleChange({ name: e.target.name, value: e.target.value }));
   };
 
@@ -47,7 +47,7 @@ const SearchContainer = () => {
             handleChange={handleSearch}
             list={['all', ...jobTypeOptions]}
           />
-          {/* ssort*/}
+          {/* sort*/}
           <FormRowSelect
             name='sort'
             value={sort}
